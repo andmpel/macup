@@ -7,7 +7,7 @@
 > Inspired by the article
 [Keeping MacOS Clean](https://waxzce.medium.com/keeping-macos-clean-this-is-my-osx-brew-update-cli-command-6c8f12dc1731).
 
-🔔 This script has recently been ported from Zsh/Bash to Go. If you prefer the old script [here are the instructions]([https://github.com/andmpel/MacOS-All-In-One-Update-Script/blob/ReadMe-Revise/zsh-instructions.md](https://github.com/andmpel/macos-all-in-one-update-script))
+🔔 This script has recently been ported from Zsh/Bash to Go. If you prefer the old script [here is that repo](https://github.com/andmpel/macos-all-in-one-update-script).
 
 This Go script simplifies the process of updating all your macOS software directly from the Terminal. While it covers many updates, you may want to install [`mas`](https://github.com/mas-cli/mas) to manage App Store applications.
 
