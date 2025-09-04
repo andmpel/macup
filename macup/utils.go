@@ -13,43 +13,23 @@ import (
 
 // Terminal color codes and constants
 const (
-	k_green      = "\033[32m"               // Green text
-	k_red        = "\033[31m"               // Red text
-	k_yellow     = "\033[33m"               // Yellow text
-	k_clear      = "\033[0m"                // Reset color
 	k_timeout    = 5 * time.Second          // Timeout for HTTP requests
 	k_testURL    = "https://www.google.com" // URL to test internet connection
 	k_gemCmdPath = "/usr/bin/gem"           // Path to the gem command
 	k_configFile = ".macup.json"            // Configuration file name
 )
 
-// printlnGreen prints a message in green color with a newline.
-func printlnGreen(msg string) {
-	fmt.Fprintf(os.Stdout, "\n%s%s%s\n", k_green, msg, k_clear)
-}
-
-// printlnRed prints a message in red color (no newline).
-func printlnRed(msg string) {
-	fmt.Fprintf(os.Stdout, "%s%s%s", k_red, msg, k_clear)
-}
-
-// printlnYellow prints a message in yellow color (no newline).
-func printlnYellow(msg string) {
-	fmt.Fprintf(os.Stdout, "%s%s%s", k_yellow, msg, k_clear)
-}
-
 // checkCommand checks if a command exists in `PATH`, print warning if not.
 func checkCommand(cmd string) bool {
 	_, err := exec.LookPath(cmd)
 	if err != nil {
-		printlnYellow(cmd + " is not installed.")
 		return false
 	}
 	return true
 }
 
 // runCommand runs a shell command and directs its output to .
-func runCommand(name string, args ...string) {
+func runCommand(name string, args ...string) (string, error) {
 	// Allow only specific commands
 	allowedCommands := map[string]bool{
 		"brew":           true,
@@ -63,23 +43,23 @@ func runCommand(name string, args ...string) {
 	}
 
 	if !allowedCommands[name] {
-		printlnRed("Command not allowed: " + name)
-		return
+		return "", fmt.Errorf("command not allowed: %s", name)
 	}
 	// Optionally validate arguments (e.g., no special characters)
 	for _, arg := range args {
 		if strings.ContainsAny(arg, "&|;$><") {
-			printlnRed("Invalid Argument: " + arg)
-			return
+			return "", fmt.Errorf("invalid argument: %s", arg)
 		}
 	}
 
 	cmd := exec.Command(name, args...)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+	var out strings.Builder
+	cmd.Stdout = &out
+	cmd.Stderr = &out
 	if err := cmd.Run(); err != nil {
-
+		return out.String(), err
 	}
+	return out.String(), nil
 }
 
 // CheckInternet checks for internet connectivity by making an HTTP request.
@@ -90,7 +70,7 @@ func CheckInternet() bool {
 
 	resp, err := client.Get(k_testURL)
 	if err != nil {
-		printlnRed("⚠️ No Internet Connection!!!")
+		fmt.Printf("⚠️ No Internet Connection!!!")
 		return false
 	}
 	defer resp.Body.Close()

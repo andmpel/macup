@@ -10,7 +10,7 @@ import (
 type Update struct {
 	Name        string
 	Description string
-	Run         func()
+	Run         func() (string, error)
 }
 
 // Config represents the user's selections.
