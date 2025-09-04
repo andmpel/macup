@@ -25,7 +25,7 @@ func UpdateBrew() (string, error) {
 		if err != nil {
 			return output, err
 		}
-		output += "Brew Diagnostics"
+		output += "Brew Diagnostics\n"
 		out, err = runCommand("brew", "doctor")
 		output += out
 		if err != nil {
