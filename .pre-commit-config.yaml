@@ -54,7 +54,7 @@ repos:
       - id: yamlfmt
   # Codespell for detecting common misspellings in code
   - repo: https://github.com/codespell-project/codespell
-    rev: "v2.4.2"
+    rev: "v2.4.3"
     hooks:
       - id: codespell
   # Gitleaks for detecting secrets in Git repositories
@@ -75,6 +75,6 @@ repos:
       - id: checkmake
   # Markdownlint for linting Markdown files
   - repo: https://github.com/DavidAnson/markdownlint-cli2
-    rev: v0.23.0
+    rev: v0.23.1
     hooks:
       - id: markdownlint-cli2
